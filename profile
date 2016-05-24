@@ -1,0 +1,6 @@
+alias more="less"
+alias mroe="less"
+alias dc="cd"
+alias ls="ls -F --color=none"
+alias ll="ls -l"
+alias lla="ls -la"
