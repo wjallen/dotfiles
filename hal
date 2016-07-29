@@ -103,9 +103,6 @@ function main ()
 ### Check to see if hal.sh has already stored some user data
 function check_hal ()
 {
-# TODO
-# Check if $HAL_HOST is compatible with this script (stampede and ls5 for now).
-
 	HAL_HOME="/home1"
 	HAL_WORK="/work"
 	HAL_SCRATCH="/scratch"
@@ -139,6 +136,7 @@ function check_hal ()
 	#HAL_FOOD_DEF=0
 	#HAL_BIRTH_DEF=0
 	#HAL_SHIRT_DEF=0
+	#HAL_GAME_DEF=0
 	DISK_OUT_MSG_FLAG=0
 	INODE_OUT_MSG_FLAG=0
 	PROJ_OUT_MSG_FLAGA=0
@@ -466,9 +464,9 @@ function goodbye (){
 # TODO 
 # Ask the user the last time they backed up in yyyy-mm-dd format, then provide reminders to back up after x days
 # After HAL gets to know you better, start printing creepy personal messages
-# We should play x together sometime.
-# Have you had a chance to wear that x shirt lately?
-# I hope you have had a chance to eat x lately?
-# I see your birthday is coming up in X days.
+#   We should play x together sometime.
+#   Have you had a chance to wear that x shirt lately?
+#   I hope you have had a chance to eat x lately?
+#   I see your birthday is coming up in X days.
 
 main
