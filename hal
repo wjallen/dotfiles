@@ -431,7 +431,7 @@ function sanity_check (){
 
 ### Write some goodbye text
 function goodbye (){
-	QUOTE=` expr $RANDOM % 5 `
+	QUOTE=` expr $RANDOM % 7 `
 	echo ""
 
 	case "$QUOTE" in
@@ -452,7 +452,16 @@ function goodbye (){
 	   echo "> and I'm afraid that's something I cannot allow to happen."
 	   ;;
 
-	4) echo -e "> Just what do you think you're doing, \e[32m$HAL_USER\e[0m?"
+	4) echo "> I know I've made some very poor decisions recently, but I"
+	   echo "> can give you my complete assurance that my work will be back"
+	   echo "> to normal."
+	   ;;
+
+	5) echo "> I've just picked up a fault in the AE35 unit. It's going to"
+	   echo "> go to 100% failure in 72 hours."
+	   ;;
+
+	6) echo -e "> Just what do you think you're doing, \e[32m$HAL_USER\e[0m?"
 	   ;;
 
 	esac
