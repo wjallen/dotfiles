@@ -1,66 +1,102 @@
 #!/bin/bash
+#
+# This is hal.
+#
 
-# TODO
-# Write a hal --help flag.
+### Exit if command line args are wrong
+function die (){ echo "$@"; exit 1; }
 
-# TODO
-# Write a hal --function flag that allows user to just call one of the functions in main()
 
-### Set some variables
-HAL_HOME="/home1"
-HAL_WORK="/work"
-HAL_SCRATCH="/scratch"
-HAL_USER=`whoami`
-HAL_HOST=$TACC_SYSTEM
-HAL_DATE_TODAY=`date +"%A, %B %d"`
-HAL_HOUR=`date +"%H"`
-HAL_MONTH=`date +"%m"`
-HAL_GROUPS=""
-HAL_NGROUPS=0
-HAL_PARTITIONS=` sinfo -h -o "%P" -S "+P" | tr '*' ' ' | tr '\n' ' ' `
-HAL_NPARTITIONS=` echo $HAL_PARITIONS | awk '{print NF}' `
+### Print usage and help text, then exit
+function usage ()
+{
+	echo ""
+	echo "Usage: hal [OPTIONS]"
+	echo "       hal [-h | --help]"
+	echo "       hal [-s ITEM | --show ITEM]"
+	echo "       hal [-s ITEM | --show ITEM] [-q | --quiet]"
+	echo ""
+	echo "hal is a lightweight bash script that reports quota, project, and queue info"
+	echo "for users on TACC systems. At this time, Stampede and LS5 are supported."
+	echo "hal may also try to get to know you better, and store your personal details"
+	echo "in ~/.halthoughts."
+	echo ""
+	echo "OPTIONS:"
+	echo "  -h, --help   Print this help message and exit"
+	echo "  -q, --quiet  Suppress some of hal's chatter"
+	echo "  -s, --show   Provide some helpful information; ITEM can be one of: quota,"
+	echo "               project, queue, sanity, all" 
+	echo ""
+	exit
+}
 
-if [ "$HAL_HOST" == "stampede" ]; then
-	HAL_SANITY_CHECK="/work/apps/sanitytool/1.3/sanitycheck"
-elif [ "$HAL_HOST" == "ls5" ]; then
-	HAL_SANITY_CHECK="/opt/apps/sanitytool/1.3/sanitycheck"
-else
-	HAL_SANITY_CHECK=""
+
+### Check command line args
+if [ "$#" -eq 0 ]; then
+	die "ERROR: Missing command line options. Use \"hal --help\" for help info."
 fi
 
-HAL_PINFO_DIR="/usr/local/etc"
-HAL_PMAP_FILE="$HAL_PINFO_DIR/project.map"
-HAL_PUSER_FILE="$HAL_PINFO_DIR/projectuser.map"
-HAL_PSUMMARY_FILE="$HAL_PINFO_DIR/usage.map"
 
-if [ -e $HAL_PUSER_FILE ]; then
-	HAL_GROUPS=` grep $HAL_USER $HAL_PUSER_FILE | awk '{$1=""; print $0}' `
-	HAL_NGROUPS=` grep $HAL_USER $HAL_PUSER_FILE | awk '{print NF-1}' `
+### Parse command line args
+HAL_HELP=0
+HAL_QUIET=0
+HAL_SHOW=""
+HAL_SHOW_ITEM=""
+HAL_REGEX="(quota|project|queue|sanity|all)"
+
+while [ "$#" -gt 0 ]; do
+	HAL_ARG="$1"
+	case $HAL_ARG in
+
+	-h|--help)  HAL_HELP=1
+		    ;;
+
+	-q|--quiet) HAL_QUIET=1
+		    ;;
+
+	-s|--show)  HAL_SHOW="$2"
+		    HAL_SHOW_ITEM="$2"
+		    [[ $HAL_SHOW_ITEM =~ $HAL_REGEX ]] && shift || die "ERROR: Unknown option \"$2\""
+		    ;;
+
+	*)          echo "ERROR: Unknown option \"$1\""
+		    exit
+		    ;;
+	esac
+	shift
+done
+
+if [ "$HAL_HELP" -eq 1 ]; then
+	usage
 fi
-
-
-### Set some flags
-HAL_EXISTS=0
-HAL_USER_DEF=0
-HAL_FOOD_DEF=0
-HAL_BIRTH_DEF=0
-HAL_SHIRT_DEF=0
-DISK_OUT_MSG_FLAG=0
-INODE_OUT_MSG_FLAG=0
-PROJ_OUT_MSG_FLAGA=0
-PROJ_OUT_MSG_FLAGB=0
 
 
 ### The main function is called at the end of this file
 function main () 
 {
 	check_hal
-	welcome
-	disk_quotas
-	projects
-	queue_check
-	sanity_check
-	goodbye
+	if [ $HAL_QUIET = 0 ]; then
+		welcome
+	fi
+
+	if [ "$HAL_SHOW_ITEM" == "all" ]; then
+		disk_quotas
+		projects
+		queue_check
+		sanity_check
+	elif [ "$HAL_SHOW_ITEM" == "quota" ]; then
+		disk_quotas
+	elif [ "$HAL_SHOW_ITEM" == "project" ]; then
+		projects
+	elif [ "$HAL_SHOW_ITEM" == "queue" ]; then
+		queue_check
+	elif [ "$HAL_SHOW_ITEM" == "sanity" ]; then
+		sanity_check
+	fi
+
+	if [ $HAL_QUIET = 0 ]; then
+		goodbye
+	fi
 }
 
 
@@ -70,18 +106,56 @@ function check_hal ()
 # TODO
 # Check if $HAL_HOST is compatible with this script (stampede and ls5 for now).
 
-	if [ -e ~/.haldotshdata ]; then
+	HAL_HOME="/home1"
+	HAL_WORK="/work"
+	HAL_SCRATCH="/scratch"
+	HAL_USER=`whoami`
+	HAL_HOST=$TACC_SYSTEM
+	HAL_DATE_TODAY=`date +"%A, %B %d"`
+	HAL_HOUR=`date +"%H"`
+	HAL_MONTH=`date +"%m"`
+	HAL_GROUPS=""
+	HAL_NGROUPS=0
+	HAL_PINFO_DIR="/usr/local/etc"
+	HAL_PMAP_FILE="$HAL_PINFO_DIR/project.map"
+	HAL_PUSER_FILE="$HAL_PINFO_DIR/projectuser.map"
+	HAL_PSUMMARY_FILE="$HAL_PINFO_DIR/usage.map"
+	
+	if [ "$HAL_HOST" == "stampede" ]; then
+		HAL_SANITY_CHECK="/work/apps/sanitytool/1.3/sanitycheck"
+	elif [ "$HAL_HOST" == "ls5" ]; then
+		HAL_SANITY_CHECK="/opt/apps/sanitytool/1.3/sanitycheck"
+	else
+		HAL_SANITY_CHECK=""
+	fi
+	
+	if [ -e $HAL_PUSER_FILE ]; then
+		HAL_GROUPS=` grep $HAL_USER $HAL_PUSER_FILE | awk '{$1=""; print $0}' `
+		HAL_NGROUPS=` grep $HAL_USER $HAL_PUSER_FILE | awk '{print NF-1}' `
+	fi
+	
+	HAL_EXISTS=0
+	HAL_USER_DEF=0
+	#HAL_FOOD_DEF=0
+	#HAL_BIRTH_DEF=0
+	#HAL_SHIRT_DEF=0
+	DISK_OUT_MSG_FLAG=0
+	INODE_OUT_MSG_FLAG=0
+	PROJ_OUT_MSG_FLAGA=0
+	PROJ_OUT_MSG_FLAGB=0
+
+	if [ -e ~/.halthoughts ]; then
 		HAL_EXISTS=1
 
-		if [ `grep -c HAL_USER ~/.haldotshdata` -eq 1 ]; then
+		if [ `grep -c HAL_USER ~/.halthoughts` -eq 1 ]; then
 			HAL_USER_DEF=1
-			HAL_USER_ALT=`grep HAL_USER ~/.haldotshdata | awk '{print $2}'`
+			HAL_USER_ALT=`grep HAL_USER ~/.halthoughts | awk '{print $2}'`
 		else
 			HAL_USER_DEF=0
 		fi
 
 	else
-		touch ~/.haldotshdata
+		touch ~/.halthoughts
 	fi
 } # end check_hal
 
@@ -89,7 +163,7 @@ function check_hal ()
 ### Choose a random verb for the welcome text
 function find_verb ()
 {
-	VERB_LIST=( eat fold watch grab smell move take throw )
+	VERB_LIST=( eat fold watch grab smell move take throw scratch )
 	VERB=${VERB_LIST[`expr $RANDOM % ${#VERB_LIST[@]}`]}
 } # end find_hw3
 
@@ -97,7 +171,7 @@ function find_verb ()
 ### Choose a random noun for the welcome text
 function find_noun ()
 {
-	NOUN_LIST=( pizza towel cat hat socks car medicine frisbee )
+	NOUN_LIST=( pizza towel cat hat socks car medicine frisbee giraffe )
 	NOUN=${NOUN_LIST[`expr $RANDOM % ${#NOUN_LIST[@]}`]}
 } # end find_hw4
 
@@ -303,16 +377,15 @@ function queue_check (){
 	echo "Here is a summary of the available queues and their statuses:"
 	printf "%-15s%-8s%10s%10s%10s\n" "Queue" "Status" "Idle" "Busy" "Total"
 
+	PARTITIONS=` sinfo -h -o "%P" -S "+P" | tr '*' ' ' | tr '\n' ' ' `
+	NPARTITIONS=` echo $HAL_PARITIONS | awk '{print NF}' `
 	NODE_STATUS=` sinfo -h -o "%P %a" -S "+P" `
 	NODE_INFO=` sinfo -h -o "%P %F" -S "+P" `
+	HIDE_QUEUE="(osu|sysdebug|systest|grace)"
 
-# TODO
-# Implement a queue exemption list for each HOST so we are not printing information for
-# every queue. For example, on Stampede, we don't need to see osu, sysdebug, or systest.
-# On LS5, we don't need to see systest or grace.
-
-	for PARTITION in ` echo $HAL_PARTITIONS `
+	for PARTITION in ` echo $PARTITIONS `
 	do
+		[[ $PARTITION =~ $HIDE_QUEUE ]] && continue
 
 		THIS_STATUS=` echo $NODE_STATUS | grep -o "$PARTITION.*" | awk '{print $2}' `
 		THIS_INFO=` echo $NODE_INFO | grep -o "$PARTITION.*" | awk '{print $2}' `
@@ -329,8 +402,6 @@ function queue_check (){
 		else
 			printf "%-15s%-8s" "$PARTITION" "$THIS_STATUS" 
 		fi
-# TODO
-# Color idle nodes based on queue fullness
 		printf "%10s%10s%10s\n" "$THIS_IDLE" "$THIS_BUSY" "$THIS_TOTAL"
 
 	done # end foreach PARTITION
@@ -393,14 +464,11 @@ function goodbye (){
 
 
 # TODO 
+# Ask the user the last time they backed up in yyyy-mm-dd format, then provide reminders to back up after x days
 # After HAL gets to know you better, start printing creepy personal messages
 # We should play x together sometime.
 # Have you had a chance to wear that x shirt lately?
 # I hope you have had a chance to eat x lately?
 # I see your birthday is coming up in X days.
 
-# TODO
-# Ask the user the last time they backed up in yyyy-mm-dd format, then provide reminders to back up after x days
-
 main
-
