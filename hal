@@ -205,9 +205,6 @@ function welcome ()
 ### Disk quotas and usage
 function disk_quotas ()
 {
-# TODO
-# Make disk and inode usage percent cutoffs variables
-
 	echo ""
 	echo "Here are your current disk usages:"
 	printf "%-10s%15s%15s%15s\n" "Disk" "Usage (GB)"  "Limit (GB)"  "% Used"
@@ -291,10 +288,8 @@ function disk_quotas ()
 
 
 ### Project names, balances, and expiration dates
-function projects (){
-# TODO
-# Make expiry and remaining balance cutoffs variables
-
+function projects ()
+{
 	echo ""
 	echo -e "You have the following \e[32m$HAL_NGROUPS\e[0m active project(s) on \e[32m$HAL_HOST\e[0m:"
 	printf "%-20s%15s%15s%15s\n" "Name" "Awarded SUs" "Remaining SUs" "Expires"
@@ -370,7 +365,8 @@ function projects (){
 
 
 ### Check the status of the various queues
-function queue_check (){
+function queue_check ()
+{
 	echo ""
 	echo "Here is a summary of the available queues and their statuses:"
 	printf "%-15s%-8s%10s%10s%10s%10s\n" "Queue" "Status" "Idle" "Busy" "Total" "% Busy"
@@ -415,7 +411,8 @@ function queue_check (){
 
 
 ### Run sanitycheck and report any problems
-function sanity_check (){
+function sanity_check ()
+{
 	SANITY_OUT=""
 
 	if [ -e $HAL_SANITY_CHECK ]; then
@@ -438,7 +435,8 @@ function sanity_check (){
 
 
 ### Write some goodbye text
-function goodbye (){
+function goodbye ()
+{
 	QUOTE=` expr $RANDOM % 7 `
 	echo ""
 
@@ -485,5 +483,11 @@ function goodbye (){
 #   Have you had a chance to wear that x shirt lately?
 #   I hope you have had a chance to eat x lately?
 #   I see your birthday is coming up in X days.
+
+# TODO
+# Make disk and inode usage percent cutoffs variables
+
+# TODO
+# Make expiry and remaining balance cutoffs variables
 
 main
