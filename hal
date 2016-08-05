@@ -165,7 +165,7 @@ function check_hal ()
 ### Choose a random verb for the welcome text
 function find_verb ()
 {
-	VERB_LIST=( eat fold watch grab smell move take throw scratch )
+	VERB_LIST=( eat fold grab smell move take throw scratch )
 	VERB=${VERB_LIST[`expr $RANDOM % ${#VERB_LIST[@]}`]}
 } # end find_hw3
 
@@ -173,7 +173,7 @@ function find_verb ()
 ### Choose a random noun for the welcome text
 function find_noun ()
 {
-	NOUN_LIST=( pizza towel cat hat socks car keys frisbee giraffe )
+	NOUN_LIST=( pizza towel cat hat socks car keys frisbee hair )
 	NOUN=${NOUN_LIST[`expr $RANDOM % ${#NOUN_LIST[@]}`]}
 } # end find_hw4
 
