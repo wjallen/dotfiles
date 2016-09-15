@@ -143,21 +143,23 @@ function check_hal ()
 	PROJ_OUT_MSG_FLAGA=0
 	PROJ_OUT_MSG_FLAGB=0
 
-	if [ -e ~/.halthoughts ]; then
-		HAL_COUNT=` cat ~/.halthoughts | head -n1 | awk '{print $2}' `
-		HAL_INC=` echo "$HAL_COUNT + 1" | bc `
-		HAL_THOUGHTS=` tail -n +2 ~/.halthoughts `
-		echo "HAL ${HAL_INC}" > ~/.halthoughts && echo "$HAL_THOUGHTS" >> ~/.halthoughts
+	if [ $HAL_QUIET -eq 0 ]; then
+		if [ -e ~/.halthoughts ]; then
+			HAL_COUNT=` cat ~/.halthoughts | head -n1 | awk '{print $2}' `
+			HAL_INC=` echo "$HAL_COUNT + 1" | bc `
+			HAL_THOUGHTS=` tail -n +2 ~/.halthoughts `
+			echo "HAL ${HAL_INC}" > ~/.halthoughts && echo "$HAL_THOUGHTS" >> ~/.halthoughts
 
-		if [ `grep -c HAL_USER ~/.halthoughts` -eq 1 ]; then
-			HAL_USER_DEF=1
-			HAL_USER_ALT=` grep HAL_USER ~/.halthoughts | awk '{print $2}' `
+			if [ `grep -c HAL_USER ~/.halthoughts` -eq 1 ]; then
+				HAL_USER_DEF=1
+				HAL_USER_ALT=` grep HAL_USER ~/.halthoughts | awk '{print $2}' `
+			else
+				HAL_USER_DEF=0
+			fi
 		else
-			HAL_USER_DEF=0
+			touch ~/.halthoughts
+			echo "HAL 0" > ~/.halthoughts
 		fi
-	else
-		touch ~/.halthoughts
-		echo "HAL 0" > ~/.halthoughts
 	fi
 } # end check_hal
 
@@ -376,7 +378,6 @@ function queue_check ()
 	printf "%-15s%-8s%10s%10s%10s%10s\n" "Queue" "Status" "Idle" "Busy" "Total" "% Busy"
 
 	PARTITIONS=` sinfo -h -o "%P" -S "+P" | tr '*' ' ' | tr '\n' ' ' `
-	NPARTITIONS=` echo $HAL_PARITIONS | awk '{print NF}' `
 	NODE_STATUS=` sinfo -h -o "%P %a" -S "+P" `
 	NODE_INFO=` sinfo -h -o "%P %F" -S "+P" `
 	HIDE_QUEUE="(osu|sysdebug|systest|grace)"
