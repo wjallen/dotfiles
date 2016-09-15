@@ -107,7 +107,7 @@ function check_hal ()
 	HAL_WORK="/work"
 	HAL_SCRATCH="/scratch"
 	HAL_USER=`whoami`
-	HAL_HOST=$TACC_SYSTEM
+	HAL_HOST=`hostname -f | awk -F. '{print $2}'`
 	HAL_DATE_TODAY=`date +"%A, %B %d"`
 	HAL_HOUR=`date +"%H"`
 	HAL_MONTH=`date +"%m"`
