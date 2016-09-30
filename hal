@@ -218,9 +218,16 @@ function disk_quotas ()
 
 	for SPACE in $HAL_HOME $HAL_WORK $HAL_SCRATCH
 	do
-		DISK_QUOTA=` lfs quota -u $HAL_USER $SPACE | grep -A1 "Filesystem" | tail -n 1 `
+		DISK_QUOTA=` lfs quota -u $HAL_USER $SPACE 2>&1 | grep -A1 "Filesystem" | tail -n 1 `
 		DISK_USAGE=` echo $DISK_QUOTA | awk '{print $2/1024/1024}' `
 		DISK_LIMIT=` echo $DISK_QUOTA | awk '{print $4/1024/1024}' `
+
+		if [ "$SPACE" == "$HAL_HOME" ]; then
+			if [ "$HAL_HOST" == "ls5" ]; then
+				DISK_USAGE=` du -bs ~/ | awk '{print $1/1024/1024}' `
+				DISK_LIMIT="5"
+			fi			
+		fi
 
 		if [ $DISK_LIMIT -eq 0 ]; then
 			DISK_PERCENT="0.0"
@@ -258,7 +265,7 @@ function disk_quotas ()
 
 	for SPACE in $HAL_HOME $HAL_WORK $HAL_SCRATCH
 	do
-		DISK_QUOTA=` lfs quota -u $HAL_USER $SPACE | grep -A1 "Filesystem" | tail -n 1 `
+		DISK_QUOTA=` lfs quota -u $HAL_USER $SPACE 2>&1 | grep -A1 "Filesystem" | tail -n 1 `
 		INODE_USAGE=` echo $DISK_QUOTA | awk '{print $6/1}' `
 		INODE_LIMIT=` echo $DISK_QUOTA | awk '{print $8/1}' `
 
@@ -308,6 +315,9 @@ function projects ()
 		PROJ_EXPIRES=` grep $PROJ_NAME $HAL_PSUMMARY_FILE | awk -F: '{print $4}' `
 		PROJ_AWARDED=` grep $PROJ_NAME $HAL_PSUMMARY_FILE | awk -F: '{print $5}' `
 		PROJ_REMAIN=` grep $PROJ_NAME $HAL_PSUMMARY_FILE | awk -F: '{print $7}' `
+		if [ -z $PROJ_REMAIN ]; then
+			PROJ_REMAIN="0"; PROJ_AWARDED="0"; PROJ_EXPIRES=`date +%F`
+		fi
 
 		printf "%-20s%15.1f" "$PROJ_NAME" "$PROJ_AWARDED"
 		
