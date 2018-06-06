@@ -224,7 +224,7 @@ function disk_quotas ()
 
 		if [ "$SPACE" == "$HAL_HOME" ]; then
 			if [ "$HAL_HOST" == "ls5" ]; then
-				DISK_USAGE=` du -bs ~/ | awk '{print $1/1024/1024}' `
+				DISK_USAGE=` du -bs ~/ | awk '{print $1/1024/1024/1024}' `
 				DISK_LIMIT="5"
 			fi			
 		fi
