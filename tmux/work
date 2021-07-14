@@ -10,21 +10,37 @@ new -s work -n mac
 split-window -h -p 50 
 selectp -t 1
 
-neww -n lonestar5
-split-window -h -p 50
+neww -n mac-dev
+split-window -h -p 50 
 selectp -t 1
+
+#neww -n lonestar5
+#split-window -h -p 50
+#selectp -t 1
 
 neww -n stampede2
 split-window -h -p 50
+send-keys "ssh wallen@staff.stampede2.tacc.utexas.edu" 
 selectp -t 1
+send-keys "ssh wallen@staff.stampede2.tacc.utexas.edu" 
 
-neww -n maverick
+neww -n frontera
 split-window -h -p 50
+send-keys "ssh wallen@staff.frontera.tacc.utexas.edu" 
 selectp -t 1
+send-keys "ssh wallen@staff.frontera.tacc.utexas.edu" 
 
-neww -n jetstream
+neww -n maverick2
 split-window -h -p 50
+send-keys "ssh wallen@staff.maverick2.tacc.utexas.edu" 
 selectp -t 1
+send-keys "ssh wallen@staff.maverick2.tacc.utexas.edu" 
+
+neww -n longhorn3
+split-window -h -p 50
+send-keys "ssh wallen@staff.longhorn.tacc.utexas.edu" 
+selectp -t 1
+send-keys "ssh wallen@staff.longhorn.tacc.utexas.edu" 
 
 selectw -t 1
 
