@@ -14,9 +14,11 @@ neww -n mac-dev
 split-window -h -p 50 
 selectp -t 1
 
-#neww -n lonestar5
-#split-window -h -p 50
-#selectp -t 1
+neww -n lonestar6
+split-window -h -p 50
+send-keys "ssh wallen@staff.ls6.tacc.utexas.edu" 
+selectp -t 1
+send-keys "ssh wallen@staff.ls6.tacc.utexas.edu" 
 
 neww -n stampede2
 split-window -h -p 50
@@ -41,6 +43,12 @@ split-window -h -p 50
 send-keys "ssh wallen@staff.longhorn.tacc.utexas.edu" 
 selectp -t 1
 send-keys "ssh wallen@staff.longhorn.tacc.utexas.edu" 
+
+neww -n isp02
+split-window -h -p 50
+send-keys "ssh wallen@isp02.tacc.utexas.edu" 
+selectp -t 1
+send-keys "ssh wallen@isp02.tacc.utexas.edu" 
 
 selectw -t 1
 
