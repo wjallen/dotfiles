@@ -3,6 +3,8 @@
 # This is hal
 #
 
+# TODO : update for ls6
+
 ### Exit if command line args are wrong
 function die (){ echo "$@"; exit 1; }
 
