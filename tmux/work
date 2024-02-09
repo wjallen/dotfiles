@@ -8,47 +8,74 @@
 
 new -s work -n mac
 split-window -h -p 50 
+#send-keys "pa sphinx-3.7.17"
 selectp -t 1
+#send-keys "pa sphinx-3.7.17"
 
 neww -n mac-dev
 split-window -h -p 50 
+#send-keys "pa tapipy-3.10.13"
 selectp -t 1
+#send-keys "pa tapipy-3.10.13"
 
 neww -n lonestar6
 split-window -h -p 50
-send-keys "ssh wallen@staff.ls6.tacc.utexas.edu" 
+send-keys "ssh wallen@staff.ls6.tacc.utexas.edu"
 selectp -t 1
-send-keys "ssh wallen@staff.ls6.tacc.utexas.edu" 
+send-keys "ssh wallen@staff.ls6.tacc.utexas.edu"
 
 neww -n stampede2
 split-window -h -p 50
-send-keys "ssh wallen@staff.stampede2.tacc.utexas.edu" 
+send-keys "ssh wallen@staff.stampede2.tacc.utexas.edu"
 selectp -t 1
-send-keys "ssh wallen@staff.stampede2.tacc.utexas.edu" 
+send-keys "ssh wallen@staff.stampede2.tacc.utexas.edu"
+
+neww -n stampede3
+split-window -h -p 50
+send-keys "ssh wallen@staff.stampede3.tacc.utexas.edu"
+selectp -t 1
+send-keys "ssh wallen@staff.stampede3.tacc.utexas.edu"
 
 neww -n frontera
 split-window -h -p 50
-send-keys "ssh wallen@staff.frontera.tacc.utexas.edu" 
+send-keys "ssh wallen@staff.frontera.tacc.utexas.edu"
 selectp -t 1
-send-keys "ssh wallen@staff.frontera.tacc.utexas.edu" 
+send-keys "ssh wallen@staff.frontera.tacc.utexas.edu"
 
-neww -n maverick2
+neww -n ranch
 split-window -h -p 50
-send-keys "ssh wallen@staff.maverick2.tacc.utexas.edu" 
+send-keys "ssh wallen@ranch.tacc.utexas.edu"
 selectp -t 1
-send-keys "ssh wallen@staff.maverick2.tacc.utexas.edu" 
+send-keys "ssh wallen@ranch.tacc.utexas.edu"
 
-neww -n longhorn3
+neww -n lsc-docker
 split-window -h -p 50
-send-keys "ssh wallen@staff.longhorn.tacc.utexas.edu" 
+send-keys "ssh wallen@lsc-docker.tacc.utexas.edu"
 selectp -t 1
-send-keys "ssh wallen@staff.longhorn.tacc.utexas.edu" 
+send-keys "ssh wallen@lsc-docker.tacc.utexas.edu"
 
-neww -n isp02
+neww -n drugdiscovery
 split-window -h -p 50
-send-keys "ssh wallen@isp02.tacc.utexas.edu" 
+send-keys "ssh wallen@drugdiscovery01.tacc.utexas.edu"
 selectp -t 1
-send-keys "ssh wallen@isp02.tacc.utexas.edu" 
+send-keys "ssh wallen@drugdiscovery01.tacc.utexas.edu"
+
+neww -n utrc-dashboard
+split-window -h -p 50
+send-keys "ssh wallen@utrc-dashboard.tacc.utexas.edu"
+selectp -t 1
+send-keys "ssh wallen@utrc-dashboard.tacc.utexas.edu"
+
+neww -n brainmap-db
+split-window -h -p 50
+send-keys "ssh wallen@brainmap-db.tacc.utexas.edu"
+selectp -t 1
+send-keys "ssh wallen@brainmap-db.tacc.utexas.edu"
+
+neww -n student-login
+split-window -h -p 50
+send-keys "ssh wallen@student-login.tacc.utexas.edu"
+selectp -t 1
+send-keys "ssh wallen@student-login.tacc.utexas.edu"
 
 selectw -t 1
-
