@@ -78,11 +78,11 @@ send-keys "ssh wallen@utrc-dashboard.tacc.utexas.edu"
 #selectp -t 1
 #send-keys "ssh wallen@brainmap-db.tacc.utexas.edu"
 
-#neww -n student-login
-#split-window -h -l 50%
-#send-keys "ssh wallen@student-login.tacc.utexas.edu"
-#selectp -t 1
-#send-keys "ssh wallen@student-login.tacc.utexas.edu"
+neww -n student-login
+split-window -h -l 50%
+send-keys "ssh wallen@student-login.tacc.utexas.edu"
+selectp -t 1
+send-keys "ssh wallen@student-login.tacc.utexas.edu"
 
 selectw -t 1
 
